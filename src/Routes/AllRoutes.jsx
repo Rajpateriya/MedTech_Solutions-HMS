@@ -23,7 +23,7 @@ const AllRoutes = () => {
     <>
       <Routes>
         <Route path="/" element={<DRegister />} />
-        <Route path="/" element={<DLogin />} />
+        <Route path="/login" element={<DLogin />} />
         <Route path="/dashboard" element={<FrontPage />} />
         <Route path="/addoctor" element={<AddDoctor />} />
         <Route path="/addambulance" element={<Add_Ambulance />} />

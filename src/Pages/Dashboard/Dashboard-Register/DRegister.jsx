@@ -53,7 +53,7 @@ const DRegister = () => {
           if (res.message === "Registered") {
             notify("Registered Successfully");
             setLoading(false);
-            return navigate("/dashboard"); //change krna h
+            return navigate("/login"); //change krna h
           }
           if (res.message === "Wrong credentials") {
             setLoading(false);
@@ -77,7 +77,7 @@ const DRegister = () => {
             notify("Registered Successfully");
             setLoading(false);
 
-            return navigate("/dashboard");
+            return navigate("/login");
           }
           if (res.message === "Wrong credentials") {
             setLoading(false);
@@ -100,7 +100,7 @@ const DRegister = () => {
             notify("Registered Successfully");
             setLoading(false);
 
-            return navigate("/dashboard");
+            return navigate("/login");
           }
           if (res.message === "Wrong credentials") {
             setLoading(false);
