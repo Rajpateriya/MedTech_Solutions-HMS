@@ -12,7 +12,7 @@ import {
 } from "../../../Redux/auth/action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Drawer } from "antd";
+// import { Drawer } from "antd";
 const notify = (text) => toast(text);
 
 const DRegister = () => {
@@ -26,7 +26,7 @@ const DRegister = () => {
     setOpen(false);
   };
 
-  // ************************************************
+  
   const [Loading, setLoading] = useState(false);
   const [placement, SetPlacement] = useState("Nurse");
   const [formvalue, setFormvalue] = useState({
@@ -168,14 +168,15 @@ const DRegister = () => {
               onChange={placementChange}
               className={"radiogroup"}
             >
-              <Radio.Button value="Nurse" className={"radiobutton"}>
-                Nurse
-              </Radio.Button>
+              
               <Radio.Button value="Doctor" className={"radiobutton"}>
                 Doctor
               </Radio.Button>
               <Radio.Button value="Admin" className={"radiobutton"}>
                 Admin
+              </Radio.Button>
+              <Radio.Button value="Nurse" className={"radiobutton"}>
+                Nurse
               </Radio.Button>
             </Radio.Group>
           </div>

@@ -31,13 +31,13 @@ const AllRoutes = () => {
         <Route path="/rooms" element={<Beds_Rooms />} />
         <Route path="/admin" element={<Add_Admin />} />
         <Route path="/addbeds" element={<AddBeds />} />
-        ******************** Doctor Part *************************
+        
         <Route path="/reports" element={<AllReport />} />
         <Route path="/checkappointment" element={<Check_Appointment />} />
         <Route path="/createslip" element={<Discharge_and_Create_Slip />} />
         <Route path="/patientdetails" element={<Patient_Details />} />
         <Route path="/doctorprofile" element={<Doctor_Profile />} />
-        ******************** Nurse Part *************************
+        
         <Route path="/addpatient" element={<Add_Patient />} />
         <Route path="/bookappointment" element={<Book_Appointment />} />
         <Route path="/nurseprofile" element={<Nurse_Profile />} />

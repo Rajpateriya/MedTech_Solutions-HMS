@@ -118,7 +118,7 @@ export const NurseRegister = (data) => async (dispatch) => {
   try {
     dispatch({ type: types.REGISTER_NURSE_REQUEST });
     const res = await axios.post(
-      "https://hms-backend-dux4.onrender.comnurses/register",
+      "https://hms-backend-dux4.onrender.com/nurses/register",
       data
     );
     // console.log(res);
