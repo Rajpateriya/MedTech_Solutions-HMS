@@ -5,6 +5,8 @@ import admin from "../../../img/admin.jpg";
 import "./DRegister.css";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import {
   AdminRegister,
   DoctorRegister,
@@ -28,7 +30,7 @@ const DRegister = () => {
 
   
   const [Loading, setLoading] = useState(false);
-  const [placement, SetPlacement] = useState("Nurse");
+  const [placement, SetPlacement] = useState("Doctor");
   const [formvalue, setFormvalue] = useState({
     email: "",
     ID: "",
@@ -42,120 +44,57 @@ const DRegister = () => {
   const navigate = useNavigate();
   const HandleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
+  
     if (formvalue.ID !== "" && formvalue.password !== "") {
-      if (placement === "Nurse") {
-        let data = {
-          ...formvalue,
-          nurseID: formvalue.ID,
-        };
-        dispatch(NurseRegister(data)).then((res) => {
-          if (res.message === "Registered") {
-            notify("Registered Successfully");
-            setLoading(false);
-            return navigate("/login"); //change krna h
-          }
-          if (res.message === "Wrong credentials") {
-            setLoading(false);
-
-            notify("Wrong credentials");
-          }
-          if (res.message === "Error") {
-            setLoading(false);
-
-            notify("Something went Wrong, Please Try Again");
-          }
-        });
-      } else if (placement === "Doctor") {
-        let data = {
-          ...formvalue,
-          docID: formvalue.ID,
-        };
-        console.log(data);
-        dispatch(DoctorRegister(data)).then((res) => {
-          if (res.message === "Registered") {
-            notify("Registered Successfully");
-            setLoading(false);
-
-            return navigate("/login");
-          }
-          if (res.message === "Wrong credentials") {
-            setLoading(false);
-
-            notify("Wrong credentials");
-          }
-          if (res.message === "Error") {
-            setLoading(false);
-
-            notify("Something went Wrong, Please Try Again");
-          }
-        });
-      } else if (placement === "Admin") {
-        let data = {
-          ...formvalue,
-          adminID: formvalue.ID,
-        };
-        dispatch(AdminRegister(data)).then((res) => {
-          if (res.message === "Registered") {
-            notify("Registered Successfully");
-            setLoading(false);
-
-            return navigate("/login");
-          }
-          if (res.message === "Wrong credentials") {
-            setLoading(false);
-
-            notify("Wrong credentials");
-          }
-          if (res.message === "Error") {
-            setLoading(false);
-
-            notify("Something went Wrong, Please Try Again");
-          }
-        });
+      let data;
+      switch (placement) {
+        case "Nurse":
+          data = {
+            ...formvalue,
+            nurseID: formvalue.ID,
+          };
+          dispatch(NurseRegister(data))
+            .then((res) => {
+              if (res && res.message === "Registered") {
+                notify("Registered Successfully");
+                navigate("/login");
+              } else {
+                notify("Error: Please check your credentials and try again.");
+              }
+            })
+            .catch((error) => {
+              notify("Something went wrong. Please try again later.");
+            });
+          break;
+        case "Doctor":
+          data = {
+            ...formvalue,
+            docID: formvalue.ID,
+          };
+          dispatch(DoctorRegister(data)).then((res) => handleResponse(res));
+          break;
+        case "Admin":
+          data = {
+            ...formvalue,
+            adminID: formvalue.ID,
+          };
+          dispatch(AdminRegister(data)).then((res) => handleResponse(res));
+          break;
+        default:
+          break;
       }
     }
   };
-
+  
   const placementChange = (e) => {
     SetPlacement(e.target.value);
   };
 
-    // const [ForgetPassword, setForgetPassword] = useState({
-    //   type: "",
-    //   email: "",
-    // });
-
-    // const HandleForgetPassword = (e) => {
-    //   setForgetPassword({ ...ForgetPassword, [e.target.name]: e.target.value });
-    // };
-
-    // const [forgetLoading, setforgetLoading] = useState(false);
-
-    // const HandleChangePassword = () => {
-    //   if (ForgetPassword.type === "") {
-    //     return notify("Please Fill all Details");
-    //   }
-    //   setforgetLoading(true);
-    //   dispatch(forgetPassword(ForgetPassword)).then((res) => {
-    //     if (res.message === "User not found") {
-    //       setforgetLoading(false);
-    //       return notify("User Not Found");
-    //     }
-    //     setForgetPassword({
-    //       type: "",
-    //       email: "",
-    //     });
-    //     onClose();
-    //     setforgetLoading(false);
-    //     return notify("Account Details Send");
-    //   });
-    // };
-
+   
   return (
     <>
       <ToastContainer />
-
+  
       <div className="mainLoginPage">
         <div className="leftside">
           <img src={banner} alt="banner" />
@@ -168,7 +107,6 @@ const DRegister = () => {
               onChange={placementChange}
               className={"radiogroup"}
             >
-              
               <Radio.Button value="Doctor" className={"radiobutton"}>
                 Doctor
               </Radio.Button>
@@ -209,87 +147,23 @@ const DRegister = () => {
                 onChange={Handlechange}
                 required
               />
-              <button type="submit">{Loading ? "Loading..." : "Submit"}</button>
-              {/* <p style={{ marginTop: "10px" }}>
-                Forget Password?{" "}
-                <span
-                  style={{ color: "blue", cursor: "pointer" }}
-                  onClick={showDrawer}
-                >
-                  Get it on Email !
-                </span>
-              </p> */}
-
-              {/* ********************************************************* */}
-              {/* <Drawer
-                title="Forget Password"
-                placement="left"
-                onClose={onClose}
-                open={open}
-              >
-                <div>
-                  <label style={{ fontSize: "18px" }}>Choose Type</label>
-
-                  <select
-                    name="type"
-                    value={ForgetPassword.type}
-                    onChange={HandleForgetPassword}
-                    required
-                  >
-                    <option value="">User Type</option>
-                    <option value="nurse">Nurse</option>
-                    <option value="doctor">Doctor</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ display: "block", fontSize: "18px" }}>
-                    Enter Email
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="example@mail.com"
-                    name="email"
-                    value={ForgetPassword.email}
-                    onChange={HandleForgetPassword}
-                    required
-                    style={{
-                      width: "100%",
-                      height: "3rem",
-                      borderRadius: "5px",
-                      border: "none",
-                      backgroundColor: "#bce0fb",
-                      fontSize: "18px",
-                      marginTop: "10px",
-                      paddingLeft: "10px",
-                    }}
-                  />
-                </div>
-
-                <button
-                  style={{
-                    width: "50%",
-                    margin: " 20px auto",
-                    display: "flex",
-                    padding: "10px",
-                    fontSize: "18px",
-                    backgroundColor: "#ff9f9f",
-                    border: "none",
-                    borderRadius: "7px",
-                    cursor: "pointer",
-                    justifyContent: "center",
-                  }}
-                  onClick={HandleChangePassword}
-                >
-                  {forgetLoading ? "Loading..." : " Send Mail"}
-                </button>
-              </Drawer> */}
+              <button type="submit">
+                {Loading ? "Loading..." : "Submit"}
+              </button>
+              {/* Already have an account? Login link */}
+              <p style={{ marginTop: "10px" }}>
+                Already have an account?{" "}
+                <Link to="/login" style={{ color: "blue", cursor: "pointer" }}>
+                  Login
+                </Link>
+              </p>
             </form>
           </div>
         </div>
       </div>
     </>
   );
+  
 };
 
 export default DRegister;

@@ -6,7 +6,7 @@ export const NurseLogin = (data) => async (dispatch) => {
   try {
     dispatch({ type: types.LOGIN_NURSE_REQUEST });
     const res = await axios.post(
-      "/nurses/login",
+      "https://hms-backend-dux4.onrender.com/nurses/login",
       data
     );
     dispatch({
@@ -92,7 +92,7 @@ export const DoctorRegister = (data) => async (dispatch) => {
       "https://hms-backend-dux4.onrender.com/doctors/register",
       data
     );
-    // console.log(res);
+    
     return res.data;
     // dispatch({
     //   type: types.REGISTER_DOCTOR_SUCCESS,
