@@ -264,13 +264,12 @@
 // export default DLogin;
 
 import React, { useState } from "react";
-import { Radio } from "antd";
+import { Radio, Drawer } from "antd";
 import banner from "../../../img/banner.png";
 import admin from "../../../img/admin.jpg";
 import "./DLogin.css";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-
 import {
   AdminLogin,
   DoctorLogin,
@@ -279,7 +278,6 @@ import {
 } from "../../../Redux/auth/action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Drawer } from "antd";
 
 const notify = (text) => toast(text);
 
@@ -322,7 +320,7 @@ const DLogin = () => {
 
         if (res.message === "Successful") {
           notify("Login Successful");
-          navigate("/dashboard");
+          setTimeout(() => navigate("/dashboard"), 1000); // Short delay before navigating
         } else if (res.message === "Wrong credentials") {
           notify("Wrong credentials");
         } else {
@@ -421,7 +419,7 @@ const DLogin = () => {
                 </span>
               </p>
               <p style={{ marginTop: "10px" }}>
-                Already have an account?{" "}
+                Don't have an account?{" "}
                 <Link to="/" style={{ color: "blue", cursor: "pointer" }}>
                   Register
                 </Link>
@@ -484,7 +482,7 @@ const DLogin = () => {
                   }}
                   onClick={handleChangePassword}
                 >
-                  {forgetLoading ? "Loading..." : " Send Mail"}
+                  {forgetLoading ? "Loading..." : "Send Mail"}
                 </button>
               </Drawer>
             </form>
@@ -496,3 +494,4 @@ const DLogin = () => {
 };
 
 export default DLogin;
+

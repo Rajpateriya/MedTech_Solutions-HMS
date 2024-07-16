@@ -275,7 +275,7 @@ export const GetPatients = () => async (dispatch) => {
     const res = await axios.get(
       `https://hms-backend-dux4.onrender.com/patients`
     );
-    console.log(res.data);
+    // console.log(res.data);
     dispatch({
       type: types.GET_PATIENT_SUCCESS,
       payload: res.data,
@@ -292,7 +292,7 @@ export const GetAllData = () => async (dispatch) => {
     const res = await axios.get(
       `https://hms-backend-dux4.onrender.com/hospitals`
     );
-    console.log(res.data);
+    // console.log(res.data);
     dispatch({
       type: types.GET_ALLDATA_SUCCESS,
       payload: res.data,

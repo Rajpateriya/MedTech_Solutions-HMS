@@ -14,7 +14,7 @@ import {
 } from "../../../Redux/auth/action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { Drawer } from "antd";
+
 const notify = (text) => toast(text);
 
 const DRegister = () => {
@@ -28,23 +28,33 @@ const DRegister = () => {
     setOpen(false);
   };
 
-  
-  const [Loading, setLoading] = useState(false);
-  const [placement, SetPlacement] = useState("Doctor");
+  const [loading, setLoading] = useState(false);
+  const [placement, setPlacement] = useState("Doctor");
   const [formvalue, setFormvalue] = useState({
     email: "",
     ID: "",
     password: "",
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const Handlechange = (e) => {
+  const handleChange = (e) => {
     setFormvalue({ ...formvalue, [e.target.name]: e.target.value });
   };
-  const navigate = useNavigate();
-  const HandleSubmit = (e) => {
+
+  const handleResponse = (res) => {
+    if (res && res.message === "Registered") {
+      notify("Registered Successfully");
+      navigate("/login");
+    } else {
+      notify("Error: Please check your credentials and try again.");
+    }
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-  
+    setLoading(true);
+
     if (formvalue.ID !== "" && formvalue.password !== "") {
       let data;
       switch (placement) {
@@ -55,15 +65,12 @@ const DRegister = () => {
           };
           dispatch(NurseRegister(data))
             .then((res) => {
-              if (res && res.message === "Registered") {
-                notify("Registered Successfully");
-                navigate("/login");
-              } else {
-                notify("Error: Please check your credentials and try again.");
-              }
+              handleResponse(res);
+              setLoading(false);
             })
             .catch((error) => {
               notify("Something went wrong. Please try again later.");
+              setLoading(false);
             });
           break;
         case "Doctor":
@@ -71,30 +78,46 @@ const DRegister = () => {
             ...formvalue,
             docID: formvalue.ID,
           };
-          dispatch(DoctorRegister(data)).then((res) => handleResponse(res));
+          dispatch(DoctorRegister(data))
+            .then((res) => {
+              handleResponse(res);
+              setLoading(false);
+            })
+            .catch((error) => {
+              notify("Something went wrong. Please try again later.");
+              setLoading(false);
+            });
           break;
         case "Admin":
           data = {
             ...formvalue,
             adminID: formvalue.ID,
           };
-          dispatch(AdminRegister(data)).then((res) => handleResponse(res));
+          dispatch(AdminRegister(data))
+            .then((res) => {
+              handleResponse(res);
+              setLoading(false);
+            })
+            .catch((error) => {
+              notify("Something went wrong. Please try again later.");
+              setLoading(false);
+            });
           break;
         default:
           break;
       }
+    } else {
+      setLoading(false);
     }
   };
-  
+
   const placementChange = (e) => {
-    SetPlacement(e.target.value);
+    setPlacement(e.target.value);
   };
 
-   
   return (
     <>
       <ToastContainer />
-  
       <div className="mainLoginPage">
         <div className="leftside">
           <img src={banner} alt="banner" />
@@ -105,15 +128,15 @@ const DRegister = () => {
             <Radio.Group
               value={placement}
               onChange={placementChange}
-              className={"radiogroup"}
+              className="radiogroup"
             >
-              <Radio.Button value="Doctor" className={"radiobutton"}>
+              <Radio.Button value="Doctor" className="radiobutton">
                 Doctor
               </Radio.Button>
-              <Radio.Button value="Admin" className={"radiobutton"}>
+              <Radio.Button value="Admin" className="radiobutton">
                 Admin
               </Radio.Button>
-              <Radio.Button value="Nurse" className={"radiobutton"}>
+              <Radio.Button value="Nurse" className="radiobutton">
                 Nurse
               </Radio.Button>
             </Radio.Group>
@@ -122,13 +145,13 @@ const DRegister = () => {
             <img src={admin} alt="profile" />
           </div>
           <div>
-            <form onSubmit={HandleSubmit}>
+            <form onSubmit={handleSubmit}>
               <h3>{placement} ID</h3>
               <input
                 type="number"
                 name="ID"
                 value={formvalue.ID}
-                onChange={Handlechange}
+                onChange={handleChange}
                 required
               />
               <h3>Email</h3>
@@ -136,7 +159,7 @@ const DRegister = () => {
                 type="email"
                 name="email"
                 value={formvalue.email}
-                onChange={Handlechange}
+                onChange={handleChange}
                 required
               />
               <h3>Password</h3>
@@ -144,11 +167,11 @@ const DRegister = () => {
                 type="password"
                 name="password"
                 value={formvalue.password}
-                onChange={Handlechange}
+                onChange={handleChange}
                 required
               />
-              <button type="submit">
-                {Loading ? "Loading..." : "Submit"}
+              <button type="submit" disabled={loading}>
+                {loading ? "Loading..." : "Submit"}
               </button>
               {/* Already have an account? Login link */}
               <p style={{ marginTop: "10px" }}>
@@ -163,7 +186,6 @@ const DRegister = () => {
       </div>
     </>
   );
-  
 };
 
 export default DRegister;
