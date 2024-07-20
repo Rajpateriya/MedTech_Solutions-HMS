@@ -66,6 +66,7 @@ const Nurse_Profile = () => {
     dispatch(UpdateNurse(formData, user._id));
     success("user updated");
     handleOk();
+   
   };
 
   return (
@@ -202,17 +203,16 @@ const Nurse_Profile = () => {
                 </h2>
                 <div className="singleitemdiv">
                   <BiTime className="singledivicons" />
-                  <p>09:00 AM - 20:00 PM (TIMING)</p>
+                  <p>09:00 AM - 22:00 PM (TIMING)</p>
                 </div>
                 <div className="singleitemdiv">
                   <FaRegHospital className="singledivicons" />
-                  <p>Apollo hospitals</p>
+                  <p>Raj hospitals</p>
                 </div>
                 <div className="singleitemdiv">
                   <FaMapMarkedAlt className="singledivicons" />
                   <p>
-                    Sri Aurobindo Marg, Ansari Nagar, Ansari Nagar East, New
-                    Delhi.
+                    Madhya Pradesh
                   </p>
                 </div>
               </div>

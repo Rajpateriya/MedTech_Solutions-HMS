@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from "react";
-import "../Doctor/CSS/Doctor_Profile.css";
-import { BiTime } from "react-icons/bi";
-import { GiMeditation } from "react-icons/gi";
-import { AiFillCalendar, AiFillEdit } from "react-icons/ai";
-import { MdBloodtype } from "react-icons/md";
-import { BsFillTelephoneFill } from "react-icons/bs";
-import { BsHouseFill, BsGenderAmbiguous } from "react-icons/bs";
-import { MdOutlineCastForEducation } from "react-icons/md";
-import { FaRegHospital, FaMapMarkedAlt, FaBirthdayCake } from "react-icons/fa";
-import Sidebar from "../../GlobalFiles/Sidebar";
-import { useDispatch, useSelector } from "react-redux";
 import { Button, message, Modal } from "antd";
-import { UpdateDoctor, UpdateNurse } from "../../../../../Redux/auth/action";
-import { GetDoctorDetails } from "../../../../../Redux/Datas/action";
+import { AiFillCalendar, AiFillEdit } from "react-icons/ai";
+import { BiTime } from "react-icons/bi";
+import { BsFillTelephoneFill, BsGenderAmbiguous, BsHouseFill } from "react-icons/bs";
+import { FaBirthdayCake, FaMapMarkedAlt, FaRegHospital } from "react-icons/fa";
+import { GiMeditation } from "react-icons/gi";
+import { MdBloodtype, MdOutlineCastForEducation } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { UpdateDoctor } from "../../../../../Redux/auth/action";
+import Sidebar from "../../GlobalFiles/Sidebar";
+import "../Doctor/CSS/Doctor_Profile.css";
 import "./CSS/Doctor_Profile.css";
 
-// *********************************************************
 const Doctor_Profile = () => {
-  const { data } = useSelector((store) => store.auth);
+  const { user } = useSelector((state) => state.auth.data); // Destructure user directly from state.auth.data
+  const dispatch = useDispatch();
 
-  const disptach = useDispatch();
-
-  useEffect(() => {
-    disptach(GetDoctorDetails());
-  }, []);
+  const [formData, setFormData] = useState({
+    docName: user.docName || "",
+    age: user.age || "",
+    gender: user.gender || "",
+    bloodGroup: user.bloodGroup || "",
+    education: user.education || "",
+    mobile: user.mobile || "",
+    DOB: user.DOB || "",
+  });
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -51,31 +52,21 @@ const Doctor_Profile = () => {
     setOpen(false);
   };
 
-  const [formData, setFormData] = useState({
-    docName: data.user.docName,
-    age: data.user.age,
-    gender: data.user.gender,
-    bloodGroup: data.user.bloodGroup,
-    education: data.user.education,
-    mobile: data.user.mobile,
-    DOB: data.user.DOB,
-  });
-
   const handleFormChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleFormSubmit = () => {
-    disptach(UpdateDoctor(formData, data.user._id));
-    success("user updated");
+    dispatch(UpdateDoctor(formData, user._id));
+    success("User updated");
     handleOk();
   };
 
-  if (data?.isAuthticated === false) {
+  if (!user) {
     return <Navigate to={"/"} />;
   }
 
-  if (data?.user.userType !== "doctor") {
+  if (user.userType !== "doctor") {
     return <Navigate to={"/dashboard"} />;
   }
 
@@ -88,28 +79,27 @@ const Doctor_Profile = () => {
           <div className="maindoctorProfile">
             <div className="firstBox">
               <div>
-                <img src={data?.user?.image} alt="docimg" />
+                <img src={user.image} alt="docimg" />
               </div>
               <hr />
               <div className="singleitemdiv">
                 <GiMeditation className="singledivicons" />
-                <p>{data?.user?.docName}</p>
+                <p>{user.docName}</p>
               </div>
               <div className="singleitemdiv">
                 <MdBloodtype className="singledivicons" />
-                <p>{data?.user?.bloodGroup}</p>
+                <p>{user.bloodGroup}</p>
               </div>
               <div className="singleitemdiv">
                 <FaBirthdayCake className="singledivicons" />
-                <p>{data?.user?.DOB}</p>
+                <p>{user.DOB}</p>
               </div>
               <div className="singleitemdiv">
                 <BsFillTelephoneFill className="singledivicons" />
-                <p>{data?.user?.mobile}</p>
+                <p>{user.mobile}</p>
               </div>
               <div className="singleitemdiv">
                 <button onClick={showModal}>
-                  {" "}
                   <AiFillEdit />
                   Edit profile
                 </button>
@@ -117,7 +107,7 @@ const Doctor_Profile = () => {
 
               <Modal
                 title="Edit details"
-                open={open}
+                visible={open}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
@@ -126,13 +116,13 @@ const Doctor_Profile = () => {
                     Cancel
                   </Button>,
                   <Button key="submit" onClick={handleFormSubmit}>
-                    Edit
+                    Update
                   </Button>,
                 ]}
               >
                 <form className="inputForm">
                   <input
-                    name="nurseName"
+                    name="docName"
                     value={formData.docName}
                     onChange={handleFormChange}
                     type="text"
@@ -145,7 +135,7 @@ const Doctor_Profile = () => {
                     type="number"
                     placeholder="Age"
                   />
-                  <select name="gender" onChange={handleFormChange}>
+                  <select name="gender" value={formData.gender} onChange={handleFormChange}>
                     <option value="">Select gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -163,14 +153,14 @@ const Doctor_Profile = () => {
                     value={formData.education}
                     onChange={handleFormChange}
                     type="text"
-                    placeholder="education"
+                    placeholder="Education"
                   />
                   <input
                     name="mobile"
                     value={formData.mobile}
                     onChange={handleFormChange}
                     type="number"
-                    placeholder="mobile"
+                    placeholder="Mobile"
                   />
                   <input
                     name="DOB"
@@ -190,20 +180,20 @@ const Doctor_Profile = () => {
                 </h2>
                 <div className="singleitemdiv">
                   <BsGenderAmbiguous className="singledivicons" />
-                  <p>{data?.user?.gender}</p>
+                  <p>{user.gender}</p>
                 </div>
                 <div className="singleitemdiv">
                   <AiFillCalendar className="singledivicons" />
-                  <p>{data?.user?.age}</p>
+                  <p>{user.age}</p>
                 </div>
 
                 <div className="singleitemdiv">
                   <MdOutlineCastForEducation className="singledivicons" />
-                  <p>{data?.user?.education}</p>
+                  <p>{user.education}</p>
                 </div>
                 <div className="singleitemdiv">
                   <BsHouseFill className="singledivicons" />
-                  <p>{data?.user?.address}</p>
+                  <p>{user.address}</p>
                 </div>
               </div>
               {/* ***********  Third Div ******************** */}
@@ -213,17 +203,16 @@ const Doctor_Profile = () => {
                 </h2>
                 <div className="singleitemdiv">
                   <BiTime className="singledivicons" />
-                  <p>09:00 AM - 20:00 PM (TIMING)</p>
+                  <p>09:00 AM - 22:00 PM (TIMING)</p>
                 </div>
                 <div className="singleitemdiv">
                   <FaRegHospital className="singledivicons" />
-                  <p>Apollo hospitals</p>
+                  <p>Raj hospitals</p>
                 </div>
                 <div className="singleitemdiv">
                   <FaMapMarkedAlt className="singledivicons" />
                   <p>
-                    Sri Aurobindo Marg, Ansari Nagar, Ansari Nagar East, New
-                    Delhi.
+                   Madhya Pradesh 
                   </p>
                 </div>
               </div>

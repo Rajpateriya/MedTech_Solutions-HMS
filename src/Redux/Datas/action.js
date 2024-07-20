@@ -34,7 +34,7 @@ export const GetDoctorDetails = () => async (dispatch) => {
     const res = await axios.get(
       "https://hms-backend-dux4.onrender.com/doctors"
     );
-    console.log(res);
+    // console.log(res);
     // dispatch({
     //   type: types.GET_DOCTOR_SUCCESS,
     //   payload: {
@@ -131,7 +131,7 @@ export const GetBeds = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_BED_REQUEST });
     const res = await axios.get("https://hms-backend-dux4.onrender.com/beds");
-    console.log(res);
+    // console.log(res);
     dispatch({
       type: types.GET_BED_SUCCESS,
       payload: res.data,
@@ -154,7 +154,7 @@ export const CreateBooking = (data) => async (dispatch) => {
       `https://hms-backend-dux4.onrender.com/appointments/create`,
       data
     );
-    console.log(res);
+    // console.log(res);
     // dispatch({ type: types.CREATE_BOOKING_SUCCESS, payload: res.data.postData });
   } catch (error) {
     console.log(error);
@@ -249,7 +249,7 @@ export const dischargePatient = (data) => async (dispatch) => {
       `https://hms-backend-dux4.onrender.com/beds/discharge`,
       data
     );
-    console.log(res);
+    // console.log(res);
     // return res.data;
     dispatch({
       type: types.DISCHARGE_PATIENT_SUCCESS,
